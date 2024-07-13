@@ -24,7 +24,7 @@ spec:
       taskRef:
         name: cleanup
 
-        - name: build
+    - name: build
       workspaces:
         - name: source
           workspace: pipeline-workspace
