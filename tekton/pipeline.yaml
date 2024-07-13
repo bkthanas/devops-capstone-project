@@ -23,21 +23,16 @@ spec:
           workspace: pipeline-workspace          
       taskRef:
         name: cleanup
-    - name: deploy
+    - name: build
       workspaces:
-        - name: manifest-dir
+        - name: source
           workspace: pipeline-workspace
       taskRef:
-        name: openshift-client
+        name: buildah
         kind: ClusterTask
       params:
-      - name: SCRIPT
-        value: |
-          echo "Updating manifest..."
-          sed -i "s|IMAGE_NAME_HERE|$(params.build-image)|g" deploy/deployment.yaml
-          cat deploy/deployment.yaml
-          echo "Deploying to OpenShift..."
-          oc apply -f deploy/
-          oc get pods -l app=accounts
+      - name: IMAGE
+        value: "$(params.build-image)"
       runAfter:
-        - build
+        - tests
+        - lint
